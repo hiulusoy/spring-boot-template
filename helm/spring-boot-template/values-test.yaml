@@ -1,0 +1,42 @@
+# Test ortamında kullanılacak pod sayısı
+replicaCount: 1  # Tek bir pod test için yeterli olabilir
+
+image:
+  # Test ortamında kullanılacak Docker image'ının repository'si
+  repository: your-docker-repo/spring-boot-template-test
+  # Uygulamanın sürüm etiketi; "latest" en güncel image'ı temsil eder
+  tag: "latest"
+  # Image çekme politikası: "IfNotPresent" -> Eğer image lokal mevcutsa çekilmez
+  pullPolicy: IfNotPresent
+
+service:
+  # Test ortamı için servis tipi: ClusterIP dahili erişim sağlar
+  type: ClusterIP
+  # Servisin dışa açılacağı port
+  port: 8080
+
+ingress:
+  # Ingress, dış erişimi sağlamak için aktif ediliyor
+  enabled: true
+  annotations:
+    # Ingress controller olarak nginx kullanılacağını belirler
+    kubernetes.io/ingress.class: "nginx"
+  hosts:
+    - host: test.example.com  # Test ortamına ait domain adı (DNS veya hosts dosyanızda tanımlı olmalı)
+      paths:
+        - path: /           # Trafiğin yönlendirileceği URL yolu
+          pathType: Prefix  # Belirtilen path ile başlayan tüm istekler yönlendirilir
+
+spring:
+  profiles:
+    active: test  # Spring Boot için aktif profil (test)
+  datasource:
+    # Test veritabanına bağlanmak için JDBC URL'si
+    url: jdbc:mysql://localhost:3306/employee_test_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    # Test veritabanı kullanıcı adı
+    username: test_employee_user
+    # Test veritabanı şifresi
+    password: test_employee_pass
+
+# Kaynak limitleri ve istekleri; burada örnek olarak boş bırakılmış, ihtiyaç duyulursa ayarlanabilir.
+resources: { }

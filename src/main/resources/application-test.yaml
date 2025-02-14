@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-boot-template-test
+  datasource:
+    url: jdbc:mysql://localhost:3306/employee_test_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: test_employee_user
+    password: test_employee_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

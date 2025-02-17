@@ -2,11 +2,11 @@
 replicaCount: 1  # Geliştirme ortamı için genellikle 1 replika yeterlidir.
 
 image:
-  # Geliştirme image'ınızın bulunduğu Docker repository
-  repository: your-docker-repo/spring-boot-template-dev
-  # Uygulamanızın sürüm numarası; geliştirme için "latest" veya belirli bir tag kullanılabilir.
+  # Yerel ortam için Docker image'ınızın adı
+  repository: spring-boot-template-dev
+  # Geliştirme sürümü; genellikle "latest" kullanılır.
   tag: "latest"
-  # Image çekme politikası: IfNotPresent tercih edilebilir.
+  # Image çekme politikası: Eğer image yerelde mevcutsa yeniden çekmez.
   pullPolicy: IfNotPresent
 
 service:
@@ -21,19 +21,19 @@ ingress:
   className: "nginx"
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    # SSL yönlendirmesi, geliştirme ortamında genellikle false olur.
+    # SSL yönlendirmesi, geliştirme ortamında kapalı kalabilir.
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   hosts:
-    - host: dev.example.com  # Geliştirme ortamına ait domain, DNS veya hosts dosyanızda tanımlı olmalı.
+    - host: dev.example.com  # Geliştirme ortamına ait domain; DNS/hosts ayarlarınıza göre.
       paths:
-        - path: /           # Trafiğin yönlendirileceği URL yolu.
-          pathType: Prefix  # Belirtilen path ile başlayan tüm istekler yönlendirilir.
+        - path: /
+          pathType: Prefix
 
 spring:
   profiles:
     active: dev  # Aktif Spring profili: dev
   datasource:
-    # Geliştirme veritabanı bağlantı URL'si; localhost kullanarak yerel veritabanına bağlanabilirsiniz.
+    # Geliştirme veritabanı bağlantı URL'si; yerel olarak çalışan MySQL veritabanı.
     url: jdbc:mysql://localhost:3306/employee_dev_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: dev_employee_user  # Geliştirme için veritabanı kullanıcı adı
     password: dev_employee_pass  # Geliştirme için veritabanı şifresi

@@ -1,15 +1,31 @@
 spring:
   application:
-    name: spring-boot-template-dev
+    name: spring-boot-template
   datasource:
-    url: jdbc:mysql://localhost:3306/employee_dev_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    username: dev_employee_user
-    password: dev_employee_pass
+    url: jdbc:mysql://localhost:3306/employee_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: employee_user
+    password: employeePass456!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update   # Varsayılan; ortama göre override edilebilir.
     show-sql: true
+
+  # Keycloak konfigürasyonu
+  keycloak:
+    realm: myrealm                           # Keycloak realm adı
+    auth-server-url: http://localhost:8080/realms/myrealm  # Keycloak sunucu URL'si
+    resource: spring-boot-template           # Client ID (uygulamanızın adı)
+    credentials:
+      secret: your-client-secret             # Client secret
+    principal-attribute: preferred_username  # Kullanıcı adı olarak kullanılacak alan
+
+  # JWT tabanlı kaynak sunucusu konfigürasyonu Keycloak ile uyumlu çalışmak için:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/myrealm
 
 server:
   port: 8080
